@@ -2,7 +2,6 @@ package storeapp.services;
 
 import storeapp.domain.Customer;
 import storeapp.repository.CustomerRepository;
-import storeapp.utils.CustomerFormValidation;
 
 import java.util.List;
 import java.util.Optional;
@@ -22,11 +21,10 @@ public class CustumerServiceImpl implements CustumerService {
 
     @Override
     public Customer createCustomer(Customer customer) {
-
-
-        String prompt = "Ingrese el id del cliente";
-        customer.setId(CustomerFormValidation.validateInt(prompt));
-
+        System.out.println("Ingrese el id del cliente");
+        int id = sc.nextInt();
+        sc.nextLine();
+        customer.setId(id);
 
         System.out.println("Ingrese el nombre del cliente");
         String name = sc.nextLine();
@@ -77,11 +75,6 @@ public class CustumerServiceImpl implements CustumerService {
     public Customer updateCustomer(Customer customer) {
         return null;
     }
-
-
-    //Validations
-
-
 
 
 
