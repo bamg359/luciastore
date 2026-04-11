@@ -4,15 +4,17 @@ import storeapp.domain.Admin;
 import storeapp.domain.Customer;
 import storeapp.repository.CategoryRepository;
 import storeapp.repository.CustomerRepository;
+import storeapp.repository.ProductRepository;
 import storeapp.services.*;
 import storeapp.userinterface.MenuApp;
 import storeapp.view.AdminView;
 import storeapp.view.CategoryView;
 import storeapp.view.CustomerView;
+import storeapp.view.ProductView;
 
 public class Config {
 
-    public static MenuApp createMenuApp(){
+    public static MenuApp createMenuApp() {
 
         // esto es un patron Simple Factory, se encarga de crear los objetos necesarios para la aplicacion, y devolver un objeto MenuApp con todos los objetos necesarios para la aplicacion,
         // esto es para evitar tener que crear los objetos en el main, y tener
@@ -23,19 +25,28 @@ public class Config {
         Admin admin = new Admin();
         CustomerRepository customerRepository = new CustomerRepository();
         CustumerService customerService = new CustumerServiceImpl(customer, customerRepository);
-        CustomerView customerView = new CustomerView( customerService, customer);
+        CustomerView customerView = new CustomerView(customerService, customer);
         AdminServiceImpl adminService = new AdminServiceImpl(admin, customerRepository);
         AdminView adminView = new AdminView(adminService, admin);
 
         // Agrego esto
         CategoryRepository categoryRepository = new CategoryRepository();
-        CategoryService categoryService = new CategoryServicesImpl (categoryRepository);
+        CategoryService categoryService = new CategoryServicesImpl(categoryRepository);
         CategoryView categoryView = new CategoryView(categoryService);
 
-        return new MenuApp(customerView, adminView, categoryView);
+        // Agrego Productos
+        ProductRepository productRepository = new ProductRepository();
+        ProductService productService = new ProductServiceImpl(productRepository, categoryRepository);
+        ProductView productView = new ProductView(productService);
+
+        return new MenuApp(customerView, adminView, categoryView, productView);
+
+
+
+
+
 
     }
-
 
 
 

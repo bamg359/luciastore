@@ -2,41 +2,68 @@ package storeapp.view;
 
 import storeapp.domain.Category;
 import storeapp.domain.Product;
+import storeapp.services.ProductService;
 import storeapp.services.StateSelector;
 
 import java.util.Scanner;
 
 public class ProductView {
 
-    Scanner scanner = new Scanner(System.in);
-    StateSelector stateSelector = new StateSelector();
-    Category category = new Category();
+    Scanner sc = new Scanner(System.in);
+    private final ProductService productService;
 
-
-    public Product createProduct(Product product){
-        System.out.println("Creating product...");
-        System.out.println("Ingrese el id del priducto");
-        int id = scanner.nextInt();
-        scanner.nextLine();
-        product.setIdProduct(id);
-        System.out.println("Ingrese el nombre del producto");
-        String name = scanner.nextLine();
-        product.setDescription(name);
-        System.out.println("Ingrese el precio del producto");
-        double price = scanner.nextDouble();
-        product.setPrice(price);
-        System.out.println("Ingrese la cantidad del producto");
-        int stock = scanner.nextInt();
-        product.setStock(stock);
-        System.out.println("INgrese el estado del producto");
-        boolean status = stateSelector.ProductState();
-        product.setState(status);
-        System.out.println("Ingrese el id de la categoria del producto");
-        product.setCategory(category);
-
-        return product;
+    public ProductView(ProductService productService) {
+        this.productService = productService;
     }
 
+    public void createProduct() {
+        Product product = productService.createProduct(new Product());
+        System.out.println("Producto creado: " + product.getIdProduct() + " - " + product.getDescription());
+    }
 
+    public void getAllProducts() {
+        System.out.println("--- Listado de Productos ---");
+        productService.getAllProducts().forEach(p ->
+                System.out.println(p.getIdProduct() + " | " + p.getDescription() +
+                        " | Precio: " + p.getPrice() +
+                        " | Stock: " + p.getStock() +
+                        " | Estado: " + p.isState() +
+                        " | Categoria: " + (p.getCategory() != null ? p.getCategory().getDescription() : "Sin categoria"))
+        );
+    }
 
+    public void getProductById() {
+        System.out.println("Ingrese el id del producto:");
+        int id = sc.nextInt();
+        sc.nextLine();
+        productService.getProductById(id)
+                .ifPresentOrElse(
+                        p -> System.out.println(p.getIdProduct() + " | " + p.getDescription() +
+                                " | Precio: " + p.getPrice() +
+                                " | Stock: " + p.getStock()),
+                        () -> System.out.println("Producto no encontrado")
+                );
+    }
+
+    public void updateProduct() {
+        System.out.println("Ingrese el id del producto a modificar:");
+        int id = sc.nextInt();
+        sc.nextLine();
+        productService.getProductById(id)
+                .ifPresentOrElse(
+                        p -> {
+                            productService.updateProduct(p);
+                            System.out.println("Producto actualizado correctamente");
+                        },
+                        () -> System.out.println("Producto no encontrado")
+                );
+    }
+
+    public void deleteProduct() {
+        System.out.println("Ingrese el id del producto a eliminar:");
+        int id = sc.nextInt();
+        sc.nextLine();
+        boolean deleted = productService.deleteProduct(id);
+        System.out.println(deleted ? "Producto eliminado correctamente" : "Producto no encontrado");
+    }
 }

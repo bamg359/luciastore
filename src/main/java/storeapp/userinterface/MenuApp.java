@@ -5,6 +5,7 @@ import storeapp.services.CustumerServiceImpl;
 import storeapp.view.AdminView;
 import storeapp.view.CategoryView;
 import storeapp.view.CustomerView;
+import storeapp.view.ProductView;
 
 import java.util.Scanner;
 
@@ -15,11 +16,13 @@ public class MenuApp {
     private final CustomerView customerView;
     private final AdminView adminView;
     private final CategoryView categoryView;
+    private final ProductView productView;
 
-    public MenuApp(CustomerView customerView, AdminView adminView, CategoryView categoryView) {
+    public MenuApp(CustomerView customerView, AdminView adminView, CategoryView categoryView, ProductView productview) {
         this.customerView = customerView;
         this.adminView = adminView;
         this.categoryView = categoryView;
+        this.productView = productview;
 
     }
 
@@ -98,6 +101,7 @@ public class MenuApp {
             switch (option) {
                 case 1:
                     System.out.println("Gestionar Productos");
+                    productMenuAdmin();
                     break;
                 case 2:
                     System.out.println("Gestionar Categorias");
@@ -115,6 +119,45 @@ public class MenuApp {
             }
         }
 
+    }
+
+    public void productMenuAdmin() {
+
+        while (true){
+            System.out.println("\n--- Menu Productos ---");
+            System.out.println("1. Crear producto");
+            System.out.println("2. Ver todos los productos");
+            System.out.println("3. Buscar producto por id");
+            System.out.println("4. Modificar producto");
+            System.out.println("5. Eliminar producto");
+            System.out.println("6. Salir");
+
+            int option = sc.nextInt();
+            sc.nextLine();
+
+            switch (option){
+                case 1:
+                    productView.createProduct();
+                    break;
+                case 2:
+                    productView.getAllProducts();
+                    break;
+                case 3:
+                    productView.getProductById();
+                    break;
+                case 4:
+                    productView.updateProduct();
+                    break;
+                case 5:
+                    productView.deleteProduct();
+                    break;
+                case 6:
+                    System.out.println("Saliendo del menu de productos...");
+                    return;
+                default:
+                    System.out.println("Opcion no valida");
+            }
+        }
     }
 
 
