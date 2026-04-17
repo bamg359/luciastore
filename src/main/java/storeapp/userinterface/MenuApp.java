@@ -34,9 +34,15 @@ public class MenuApp {
         int init = sc.nextInt();
         sc.nextLine();
 
-        while (init != 0) {
+        // Agrego while hasta que seleccione 1
+        while (init != 1){
+            System.out.println("Opción invalida. Presione 1 para iniciar.");
+            init = sc.nextInt();
+            sc.nextLine();
+        }
 
-            System.out.println("Selecione 1. Registrar Usuario 2. Iniciar Sesion 3. Salir");
+        while (init != 0) {
+            System.out.println("Selecione" + "\n" + " 1. Registrar Usuario 2. Iniciar Sesion 3. Salir");
             int option = sc.nextInt();
             sc.nextLine();
 
