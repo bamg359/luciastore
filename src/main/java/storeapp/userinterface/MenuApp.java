@@ -1,178 +1,192 @@
 package storeapp.userinterface;
 
+import storeapp.services.AuthService;
+import storeapp.utils.CustomerFormValidation;
 import storeapp.view.AdminView;
+import storeapp.view.CategoryView;
 import storeapp.view.CustomerView;
 import storeapp.view.ProductView;
-import storeapp.view.CategoryView;
-import storeapp.utils.ProductFormValidation;
+
+import java.util.Scanner;
 
 public class MenuApp {
 
-    private final CustomerView customerView;
-    private final AdminView adminView;
-    private final ProductView productView;
-    private final CategoryView categoryView;
+    Scanner sc = new Scanner(System.in);
 
-    public MenuApp(CustomerView customerView, AdminView adminView, ProductView productView, CategoryView categoryView) {
+    private final CustomerView customerView;
+    private final AdminView    adminView;
+    private final ProductView  productView;
+    private final CategoryView categoryView;
+    private final AuthService authService;
+
+    public MenuApp(CustomerView customerView, AdminView adminView,
+                   ProductView productView, CategoryView categoryView,
+                   AuthService authService) {
         this.customerView = customerView;
-        this.adminView = adminView;
-        this.productView = productView;
+        this.adminView    = adminView;
+        this.productView  = productView;
         this.categoryView = categoryView;
+        this.authService  = authService;
     }
 
     public void showMainMenu() {
-        System.out.println("--- BIENVENIDO A LA TIENDA ONLINE ---");
-        int init = ProductFormValidation.validateInt("Presione 1 para iniciar (0 para salir):");
+
+        System.out.println("Bienvenido a la tienda online");
+        System.out.println("Presione 1 para iniciar la aplicacion");
+
+        int init = sc.nextInt();
+        sc.nextLine();
 
         while (init != 0) {
-            System.out.println("\n--- Menú Principal ---");
-            System.out.println("1. Registrar Usuario\n2. Iniciar Sesión\n3. Salir");
-            int option = ProductFormValidation.validateInt("Seleccione una opción:");
+
+            System.out.println("\n=== MENÚ PRINCIPAL ===");
+            System.out.println("1. Registrar Usuario");
+            System.out.println("2. Iniciar Sesion");
+            System.out.println("3. Salir");
+
+            int option = CustomerFormValidation.validateInt("Seleccione una opcion");
 
             switch (option) {
                 case 1:
-                    registrarUsuario();
+                    System.out.println("1. Cliente  2. Administrador");
+                    int userType = CustomerFormValidation.validateInt("Tipo de usuario");
+                    if (userType == 1) {
+                        customerView.createCustomer();
+                    } else if (userType == 2) {
+                        adminView.createAdmin();
+                    } else {
+                        System.out.println("Opcion no valida");
+                    }
                     break;
+
                 case 2:
-                    iniciarSesion();
+                    // ✅ AUTENTICACIÓN REAL
+                    System.out.println("\n=== INICIAR SESIÓN ===");
+                    String email    = CustomerFormValidation.validateString("Ingrese su email");
+                    String password = CustomerFormValidation.validateString("Ingrese su contraseña");
+
+                    String rol = authService.login(email, password);
+                    profileSelector(rol);
                     break;
+
                 case 3:
-                    System.out.println("Saliendo de la aplicación...");
+                    System.out.println("Saliendo de la aplicacion. ¡Hasta luego!");
                     init = 0;
                     break;
+
                 default:
-                    System.out.println("❎ Opción no válida.");
+                    System.out.println("Opcion no valida");
             }
-        }
-    }
-
-    private void registrarUsuario() {
-        System.out.println("\n--- Registro ---");
-        System.out.println("1. Cliente\n2. Administrador");
-        int userType = ProductFormValidation.validateInt("Tipo de usuario:");
-        if (userType == 1) {
-            customerView.createCustomer();
-        } else if (userType == 2) {
-            adminView.createAdmin();
-        } else {
-            System.out.println("❎ Opción inválida.");
-        }
-    }
-
-    private void iniciarSesion() {
-        System.out.println("\n--- Iniciar Sesión ---");
-        System.out.println("1. Perfil Administrador\n2. Perfil Cliente");
-        int profileType = ProductFormValidation.validateInt("Seleccione perfil:");
-
-        if (profileType == 1) {
-            profileSelector("admin");
-        } else if (profileType == 2) {
-            profileSelector("customer");
-        } else {
-            System.out.println("❎ Perfil no reconocido.");
         }
     }
 
     public void profileSelector(String profile) {
-        if (profile.equals("admin")) {
-            showMenuAdmin();
-        } else if (profile.equals("customer")) {
-            showMenuCustomer();
+        switch (profile) {
+            case "admin":
+                showMenuAdmin();
+                break;
+            case "customer":
+                showMenuCustomer();
+                break;
+            default:
+                System.out.println("No se pudo iniciar sesion. Verifique sus credenciales.");
         }
     }
 
-    // --- MENÚ ADMINISTRADOR ---
     public void showMenuAdmin() {
         while (true) {
-            System.out.println("\n--- MENU ADMINISTRADOR ---");
-            System.out.println("1. Gestionar Productos\n2. Gestionar Categorías\n3. Gestionar Clientes\n4. Cerrar Sesión");
-            int option = ProductFormValidation.validateInt("Seleccione:");
+            System.out.println("\n=== MENÚ ADMINISTRADOR ===");
+            System.out.println("1. Gestionar Productos");
+            System.out.println("2. Gestionar Categorias");
+            System.out.println("3. Gestionar Clientes");
+            System.out.println("4. Salir");
+
+            int option = CustomerFormValidation.validateInt("Seleccione una opcion");
 
             switch (option) {
-                case 1: gestionarProductos(); break;
-                case 2: gestionarCategorias(); break;
-                case 3: customerMenuAdmin(); break;
-                case 4: return;
-                default: System.out.println("❎ Opción no válida.");
+                case 1:
+                    System.out.println("Gestionar Productos");
+                    // productView.productMenu(); // descomenta cuando tengas el método
+                    break;
+                case 2:
+                    System.out.println("Gestionar Categorias");
+                    // categoryView.categoryMenu(); // descomenta cuando tengas el método
+                    break;
+                case 3:
+                    customerMenuAdmin();
+                    break;
+                case 4:
+                    System.out.println("Saliendo del menu administrador");
+                    return;
+                default:
+                    System.out.println("Opcion no valida");
             }
         }
     }
 
-    private void gestionarProductos() {
-        System.out.println("\n--- Módulo Productos (Admin) ---");
-        System.out.println("1. Registrar\n2. Actualizar\n3. Eliminar\n4. Listar Todo");
-        int opt = ProductFormValidation.validateInt("Seleccione:");
-        switch (opt) {
-            case 1: productView.createProduct(); break;
-            case 2: productView.updateProduct(); break;
-            case 3: productView.deleteProduct(); break;
-            case 4: productView.getAllProducts(); break;
-            default: System.out.println("❎ Opción inválida.");
-        }
-    }
-
-    private void gestionarCategorias() {
-        System.out.println("\n--- Módulo Categorías (Admin) ---");
-        System.out.println("1. Registrar\n2. Eliminar\n3. Listar Todo");
-        int opt = ProductFormValidation.validateInt("Seleccione:");
-        switch (opt) {
-            case 1: categoryView.createCategory(); break;
-            case 2: categoryView.deleteCategory(); break;
-            case 3: categoryView.getAllCategories(); break;
-            default: System.out.println("❎ Opción inválida.");
-        }
-    }
-
-    // --- MENÚ CLIENTE ---
     public void showMenuCustomer() {
+        System.out.println("\n=== MENÚ CLIENTE ===");
         while (true) {
-            System.out.println("\n--- MENU CLIENTE ---");
-            System.out.println("1. VER CATÁLOGO DE PRODUCTOS (Todos)");
-            System.out.println("2. BUSCAR PRODUCTO POR ID");
-            System.out.println("3. Ver mi Perfil");
-            System.out.println("4. Modificar mi Perfil");
-            System.out.println("5. Cerrar Sesión");
+            System.out.println("1. Crear mi perfil");
+            System.out.println("2. Ver mi perfil por id");
+            System.out.println("3. Modificar mi perfil");
+            System.out.println("4. Salir");
 
-            int option = ProductFormValidation.validateInt("Seleccione una opción:");
+            int option = CustomerFormValidation.validateInt("Seleccione una opcion");
 
             switch (option) {
                 case 1:
-                    System.out.println("\n--- Catálogo de Productos ---");
-                    productView.getAllProducts(); // Ahora el cliente puede verlos
+                    customerView.createCustomer();
                     break;
                 case 2:
-                    int id = ProductFormValidation.validateInt("Ingrese el ID del producto:");
-                    productView.getProductById(id); // Ahora el cliente puede buscar
+                    int id = CustomerFormValidation.validateInt("Ingrese su id");
+                    customerView.getCustumerById(id);
                     break;
                 case 3:
-                    int myId = ProductFormValidation.validateInt("Ingrese su ID para validar:");
-                    customerView.getCustumerById(myId);
-                    break;
-                case 4:
                     customerView.updateCustumer();
                     break;
-                case 5:
-                    System.out.println("Cerrando sesión de cliente...");
+                case 4:
+                    System.out.println("Saliendo del menu cliente");
                     return;
                 default:
-                    System.out.println("❎ Opción no válida.");
+                    System.out.println("Opcion no valida");
             }
         }
     }
 
     public void customerMenuAdmin() {
+        System.out.println("\n=== GESTIÓN DE CLIENTES ===");
         while (true) {
-            System.out.println("\n--- Módulo Clientes (Admin) ---");
-            System.out.println("1. Crear\n2. Buscar por ID\n3. Modificar\n4. Ver Todos\n5. Eliminar\n6. Volver");
-            int option = ProductFormValidation.validateInt("Seleccione:");
+            System.out.println("1. Crear perfil cliente");
+            System.out.println("2. Ver perfil por id");
+            System.out.println("3. Modificar perfil");
+            System.out.println("4. Ver todos los clientes");
+            System.out.println("5. Eliminar perfil");
+            System.out.println("6. Volver");
+
+            int option = CustomerFormValidation.validateInt("Seleccione una opcion");
+
             switch (option) {
-                case 1: customerView.createCustomer(); break;
-                case 2: customerView.getCustumerById(ProductFormValidation.validateInt("ID:")); break;
-                case 3: customerView.updateCustumer(); break;
-                case 4: adminView.getAllCustomers(); break;
-                case 5: customerView.deleteCustomer(); break;
-                case 6: return;
-                default: System.out.println("❎ Opción inválida.");
+                case 1:
+                    customerView.createCustomer();
+                    break;
+                case 2:
+                    int id = CustomerFormValidation.validateInt("Ingrese el id del cliente");
+                    customerView.getCustumerById(id);
+                    break;
+                case 3:
+                    customerView.updateCustumer();
+                    break;
+                case 4:
+                    adminView.getAllCustomers();
+                    break;
+                case 5:
+                    customerView.deleteCustomer();
+                    break;
+                case 6:
+                    return;
+                default:
+                    System.out.println("Opcion no valida");
             }
         }
     }
