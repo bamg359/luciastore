@@ -11,6 +11,9 @@ import storeapp.view.AdminView;
 import storeapp.view.CategoryView;
 import storeapp.view.CustomerView;
 import storeapp.view.ProductView;
+import storeapp.view.CategoryView;
+import storeapp.view.OrderView;
+import storeapp.utils.ProductFormValidation;
 
 import java.util.Scanner;
 import java.util.Optional;
@@ -23,6 +26,9 @@ public class MenuApp {
     private final AdminView    adminView;
     private final ProductView  productView;
     private final CategoryView categoryView;
+    private final OrderView orderView;
+
+    public MenuApp(CustomerView customerView, AdminView adminView, ProductView productView, CategoryView categoryView, OrderView orderView) {
     private final AuthService authService;
 
     public MenuApp(CustomerView customerView, AdminView adminView,
@@ -37,6 +43,7 @@ public class MenuApp {
         this.adminView    = adminView;
         this.productView  = productView;
         this.categoryView = categoryView;
+        this.orderView = orderView;
         this.authService  = authService;
         this.adminService = adminService;
         this.adminRepository = adminRepository;
@@ -59,6 +66,7 @@ public class MenuApp {
 
             int option = CustomerFormValidation.validateInt("Seleccione una opcion");
             System.out.println("\n--- Menú Principal ---");
+            System.out.println("1. Iniciar Sesión\n2. Salir");
             System.out.println("1. Registrar Usuario Cliente");
             System.out.println("2. Iniciar Sesión");
             System.out.println("3. Crear Administrador (Requiere credenciales de admin)");
@@ -68,6 +76,9 @@ public class MenuApp {
 
             switch (option) {
                 case 1:
+                    iniciarSesion();
+                    break;
+                case 2:
                     System.out.println("1. Cliente  2. Administrador");
                     int userType = CustomerFormValidation.validateInt("Tipo de usuario");
                     if (userType == 1) {
@@ -343,6 +354,14 @@ public class MenuApp {
     public void showMenuCustomer() {
         System.out.println("\n=== MENÚ CLIENTE ===");
         while (true) {
+            System.out.println("\n--- MENU CLIENTE ---");
+            System.out.println("1. VER CATÁLOGO DE PRODUCTOS (Todos)");
+            System.out.println("2. BUSCAR PRODUCTO POR ID");
+            System.out.println("3. Ver mi Perfil");
+            System.out.println("4. Modificar mi Perfil");
+            System.out.println("5. Realizar Pedido");
+            System.out.println("6. Ver mis Pedidos");
+            System.out.println("7. Cerrar Sesión");
             System.out.println("1. Crear mi perfil");
             System.out.println("2. Ver mi perfil por id");
             System.out.println("3. Modificar mi perfil");
@@ -367,6 +386,16 @@ public class MenuApp {
                 case 3:
                     customerView.updateCustumer();
                     break;
+                case 5:
+                    int customerId = ProductFormValidation.validateInt("Ingrese su ID de cliente:");
+                    orderView.createOrder(customerId);
+                    break;
+                case 6:
+                    int custId = ProductFormValidation.validateInt("Ingrese su ID de cliente:");
+                    orderView.viewMyOrders(custId);
+                    break;
+                case 7:
+                    System.out.println("Cerrando sesión de cliente...");
                 case 4:
                     System.out.println("Saliendo del menu cliente");
                     return;

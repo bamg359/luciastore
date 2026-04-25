@@ -5,7 +5,8 @@ import storeapp.domain.Customer;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
-public class CustomerFormValidation {
+public class
+CustomerFormValidation {
 
     static Scanner sc = new Scanner(System.in);
 

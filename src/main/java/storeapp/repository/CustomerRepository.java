@@ -29,6 +29,13 @@ public class CustomerRepository {
         return customers;
     }
 
+
+    public Customer findCustomerById(int id){
+        for(Customer customer: customers){
+            if(customer.getId() == id){
+                return customer;
+            }
+        }
     public Customer findCustomerById(int id) {
         for (Customer customer : customers) {
             if (customer.getId() == id) {
@@ -58,6 +65,15 @@ public class CustomerRepository {
         return null;
     }
 
+
+
+    public void deleteCustomer(int id){
+        for(int i = 0; i < customers.size(); i++){
+            if(customers.get(i).getId() == id){
+                customers.remove(i);
+                break;
+            }
+        }
     public void deleteCustomer(int id) {
         customers.removeIf(customer -> customer.getId() == id);
     }
