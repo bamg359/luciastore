@@ -4,6 +4,7 @@ import storeapp.view.AdminView;
 import storeapp.view.CustomerView;
 import storeapp.view.ProductView;
 import storeapp.view.CategoryView;
+import storeapp.view.OrderView;
 import storeapp.utils.ProductFormValidation;
 
 public class MenuApp {
@@ -12,12 +13,14 @@ public class MenuApp {
     private final AdminView adminView;
     private final ProductView productView;
     private final CategoryView categoryView;
+    private final OrderView orderView;
 
-    public MenuApp(CustomerView customerView, AdminView adminView, ProductView productView, CategoryView categoryView) {
+    public MenuApp(CustomerView customerView, AdminView adminView, ProductView productView, CategoryView categoryView, OrderView orderView) {
         this.customerView = customerView;
         this.adminView = adminView;
         this.productView = productView;
         this.categoryView = categoryView;
+        this.orderView = orderView;
     }
 
     public void showMainMenu() {
@@ -26,17 +29,14 @@ public class MenuApp {
 
         while (init != 0) {
             System.out.println("\n--- Menú Principal ---");
-            System.out.println("1. Registrar Usuario\n2. Iniciar Sesión\n3. Salir");
+            System.out.println("1. Iniciar Sesión\n2. Salir");
             int option = ProductFormValidation.validateInt("Seleccione una opción:");
 
             switch (option) {
                 case 1:
-                    registrarUsuario();
-                    break;
-                case 2:
                     iniciarSesion();
                     break;
-                case 3:
+                case 2:
                     System.out.println("Saliendo de la aplicación...");
                     init = 0;
                     break;
@@ -46,18 +46,6 @@ public class MenuApp {
         }
     }
 
-    private void registrarUsuario() {
-        System.out.println("\n--- Registro ---");
-        System.out.println("1. Cliente\n2. Administrador");
-        int userType = ProductFormValidation.validateInt("Tipo de usuario:");
-        if (userType == 1) {
-            customerView.createCustomer();
-        } else if (userType == 2) {
-            adminView.createAdmin();
-        } else {
-            System.out.println("❎ Opción inválida.");
-        }
-    }
 
     private void iniciarSesion() {
         System.out.println("\n--- Iniciar Sesión ---");
@@ -131,7 +119,9 @@ public class MenuApp {
             System.out.println("2. BUSCAR PRODUCTO POR ID");
             System.out.println("3. Ver mi Perfil");
             System.out.println("4. Modificar mi Perfil");
-            System.out.println("5. Cerrar Sesión");
+            System.out.println("5. Realizar Pedido");
+            System.out.println("6. Ver mis Pedidos");
+            System.out.println("7. Cerrar Sesión");
 
             int option = ProductFormValidation.validateInt("Seleccione una opción:");
 
@@ -152,6 +142,14 @@ public class MenuApp {
                     customerView.updateCustumer();
                     break;
                 case 5:
+                    int customerId = ProductFormValidation.validateInt("Ingrese su ID de cliente:");
+                    orderView.createOrder(customerId);
+                    break;
+                case 6:
+                    int custId = ProductFormValidation.validateInt("Ingrese su ID de cliente:");
+                    orderView.viewMyOrders(custId);
+                    break;
+                case 7:
                     System.out.println("Cerrando sesión de cliente...");
                     return;
                 default:

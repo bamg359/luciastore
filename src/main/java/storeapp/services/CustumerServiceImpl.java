@@ -5,11 +5,8 @@ import storeapp.repository.CustomerRepository;
 import storeapp.utils.CustomerFormValidation;
 
 import java.util.Optional;
-import java.util.Scanner;
 
 public class CustumerServiceImpl implements CustumerService {
-
-    Scanner sc = new Scanner(System.in);
 
     //Ahora vamos a comunicar las clases , para eso vamos a crear una instancia de la capa inmediatamente anterior
     private final CustomerRepository customerRepository;
@@ -26,24 +23,33 @@ public class CustumerServiceImpl implements CustumerService {
 
         Customer customer = new Customer();
 
-        String prompt = "Ingrese el id del cliente";
-        customer.setId(CustomerFormValidation.validateInt(prompt));
+        int id;
+        while (true) {
+            String prompt = "Ingrese el id del cliente";
+            id = CustomerFormValidation.validateInt(prompt);
+            if (customerRepository.findCustomerById(id) == null) {
+                customer.setId(id);
+                break;
+            } else {
+                System.out.println("❎ ID ya existe, ingrese un ID único");
+            }
+        }
 
 
         System.out.println("Ingrese el nombre del cliente");
-        String name = sc.nextLine();
+        String name = CustomerFormValidation.validateString("Ingrese el nombre del cliente");
         customer.setName(name);
 
         System.out.println("Ingrese el apellido");
-        String lastName = sc.nextLine();
+        String lastName = CustomerFormValidation.validateString("Ingrese el apellido");
         customer.setLastName(lastName);
 
         System.out.println("ingrese el email");
-        String email = sc.nextLine();
+        String email = CustomerFormValidation.validateString("ingrese el email");
         customer.setEmail(email);
 
         System.out.println("Ingrese el password ");
-        String password = sc.nextLine();
+        String password = CustomerFormValidation.validateString("Ingrese el password ");
         customer.setPassword(password);
 
         System.out.println("Estado Cliente ");
@@ -51,9 +57,8 @@ public class CustumerServiceImpl implements CustumerService {
         customer.setStatus(CustomerStateSelector.selectCustomerState());
 
         System.out.println("Cupo");
-        double quote = sc.nextDouble();
+        double quote = CustomerFormValidation.validateDouble("Cupo");
         customer.setQuote(quote);
-        sc.nextLine();
 
         System.out.println("Tipo de Cliente");
         customer.setCustomerType(CustomerTypeSelector.selectTypeCustomer());
@@ -79,14 +84,19 @@ public class CustumerServiceImpl implements CustumerService {
         System.out.println("Estoy en el service");
         Customer customer = customerRepository.findCustomerById(id);
 
-        if(customer.getId() == id){
+        if(customer != null){
 
             System.out.println("Actualizar 1. id 2. Nombre 3 Apellido 4.Correo 5. Contraseña");
             int option = CustomerFormValidation.validateInt("Opcion");
 
             switch (option){
                 case 1:
-                    customer.setId(CustomerFormValidation.validateInt("Actualizar id"));
+                    int newId = CustomerFormValidation.validateInt("Actualizar id");
+                    if (customerRepository.findCustomerById(newId) == null || newId == customer.getId()) {
+                        customer.setId(newId);
+                    } else {
+                        System.out.println("❎ ID ya existe, no se actualizó");
+                    }
                     break;
                 case 2:
                     customer.setName(CustomerFormValidation.validateString("Actualzar nombre"));

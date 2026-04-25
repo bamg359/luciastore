@@ -32,18 +32,12 @@ public class CustomerRepository {
 
 
     public Customer findCustomerById(int id){
-        try{
-            for(Customer customer: customers){
-                if(customer.getId() == id){
-                    System.out.println(customer.getId() + " " + customer.getName() + " " + customer.getLastName() + " " + customer.getEmail() + " " + customer.getPassword() + " " + customer.isStatus() + " " + customer.getQuote() + " " + customer.getCustomerType());
-                }
+        for(Customer customer: customers){
+            if(customer.getId() == id){
                 return customer;
             }
-            return null;
-        }catch (Exception e){
-            System.out.println("❎ Customer not found");
-            return null;
         }
+        return null;
     }
 
     public void findCustomerByEmail(){
@@ -66,9 +60,10 @@ public class CustomerRepository {
 
 
     public void deleteCustomer(int id){
-        for(Customer customer: customers){
-            if(id == customer.getId()){
-                customers.remove(id);
+        for(int i = 0; i < customers.size(); i++){
+            if(customers.get(i).getId() == id){
+                customers.remove(i);
+                break;
             }
         }
     }

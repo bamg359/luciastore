@@ -4,16 +4,20 @@ import storeapp.domain.Admin;
 import storeapp.repository.CustomerRepository;
 import storeapp.repository.ProductRepository;
 import storeapp.repository.CategoryRepository;
+import storeapp.repository.OrderRepository;
 import storeapp.services.AdminServiceImpl;
 import storeapp.services.CustumerService;
 import storeapp.services.CustumerServiceImpl;
 import storeapp.services.ProductServiceImpl;
 import storeapp.services.CategoryServiceImpl;
+import storeapp.services.OrderService;
+import storeapp.services.OrderServiceImpl;
 import storeapp.userinterface.MenuApp;
 import storeapp.view.AdminView;
 import storeapp.view.CustomerView;
 import storeapp.view.ProductView;
 import storeapp.view.CategoryView;
+import storeapp.view.OrderView;
 
 public class Config {
 
@@ -38,7 +42,12 @@ public class Config {
         ProductServiceImpl productService = new ProductServiceImpl(productRepository, categoryRepository);
         ProductView productView = new ProductView(productService);
 
-        // 4. RETORNO: Pasamos las 4 vistas al menú
-        return new MenuApp(customerView, adminView, productView, categoryView);
+        // 4. NUEVA SECCIÓN: Configuración de Órdenes
+        OrderRepository orderRepository = new OrderRepository();
+        OrderService orderService = new OrderServiceImpl(orderRepository, productRepository);
+        OrderView orderView = new OrderView(orderService);
+
+        // 5. RETORNO: Pasamos las 5 vistas al menú
+        return new MenuApp(customerView, adminView, productView, categoryView, orderView);
     }
 }

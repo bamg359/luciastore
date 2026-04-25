@@ -19,7 +19,18 @@ public class CustomerView {
 
     public void getCustumerById(int id){
 
-        customerService.getCustomerById(id);
+        Customer customer = customerService.getCustomerById(id);
+        if (customer != null) {
+            System.out.println("ID: " + customer.getId());
+            System.out.println("Nombre: " + customer.getName());
+            System.out.println("Apellido: " + customer.getLastName());
+            System.out.println("Email: " + customer.getEmail());
+            System.out.println("Estado: " + customer.isStatus());
+            System.out.println("Cupo: " + customer.getQuote());
+            System.out.println("Tipo: " + customer.getCustomerType());
+        } else {
+            System.out.println("❎ Cliente no encontrado");
+        }
     }
 
 
