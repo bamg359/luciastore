@@ -1,5 +1,7 @@
 package storeapp.userinterface;
 
+import storeapp.services.AuthService;
+import storeapp.utils.CustomerFormValidation;
 import storeapp.domain.Admin;
 import storeapp.domain.enums.AdminPermission;
 import storeapp.repository.AdminRepository;
@@ -10,32 +12,52 @@ import storeapp.view.CategoryView;
 import storeapp.view.CustomerView;
 import storeapp.view.ProductView;
 
+import java.util.Scanner;
 import java.util.Optional;
 
 public class MenuApp {
 
+    Scanner sc = new Scanner(System.in);
+
     private final CustomerView customerView;
-    private final AdminView adminView;
-    private final ProductView productView;
+    private final AdminView    adminView;
+    private final ProductView  productView;
     private final CategoryView categoryView;
+    private final AuthService authService;
+
+    public MenuApp(CustomerView customerView, AdminView adminView,
+                   ProductView productView, CategoryView categoryView,
+                   AuthService authService) {
     private final AdminServiceImpl adminService;
     private final AdminRepository adminRepository;
 
     public MenuApp(CustomerView customerView, AdminView adminView, ProductView productView, 
                    CategoryView categoryView, AdminServiceImpl adminService, AdminRepository adminRepository) {
         this.customerView = customerView;
-        this.adminView = adminView;
-        this.productView = productView;
+        this.adminView    = adminView;
+        this.productView  = productView;
         this.categoryView = categoryView;
+        this.authService  = authService;
         this.adminService = adminService;
         this.adminRepository = adminRepository;
     }
 
     public void showMainMenu() {
-        System.out.println("--- BIENVENIDO A LA TIENDA ONLINE ---");
-        int init = ProductFormValidation.validateInt("Presione 1 para iniciar (0 para salir):");
+
+        System.out.println("Bienvenido a la tienda online");
+        System.out.println("Presione 1 para iniciar la aplicacion");
+
+        int init = sc.nextInt();
+        sc.nextLine();
 
         while (init != 0) {
+
+            System.out.println("\n=== MENÚ PRINCIPAL ===");
+            System.out.println("1. Registrar Usuario");
+            System.out.println("2. Iniciar Sesion");
+            System.out.println("3. Salir");
+
+            int option = CustomerFormValidation.validateInt("Seleccione una opcion");
             System.out.println("\n--- Menú Principal ---");
             System.out.println("1. Registrar Usuario Cliente");
             System.out.println("2. Iniciar Sesión");
@@ -46,19 +68,52 @@ public class MenuApp {
 
             switch (option) {
                 case 1:
-                    registrarUsuario();
+                    System.out.println("1. Cliente  2. Administrador");
+                    int userType = CustomerFormValidation.validateInt("Tipo de usuario");
+                    if (userType == 1) {
+                        customerView.createCustomer();
+                    } else if (userType == 2) {
+                        adminView.createAdmin();
+                    } else {
+                        System.out.println("Opcion no valida");
+                    }
                     break;
+
                 case 2:
-                    iniciarSesion();
+                    // ✅ AUTENTICACIÓN REAL
+                    System.out.println("\n=== INICIAR SESIÓN ===");
+                    String email    = CustomerFormValidation.validateString("Ingrese su email");
+                    String password = CustomerFormValidation.validateString("Ingrese su contraseña");
+
+                    String rol = authService.login(email, password);
+                    profileSelector(rol);
                     break;
+
                 case 3:
+                    System.out.println("Saliendo de la aplicacion. ¡Hasta luego!");
                     crearAdminDesdeMenuPrincipal();
                     break;
                 case 4:
                     System.out.println("Saliendo de la aplicación...");
                     init = 0;
                     break;
+
                 default:
+                    System.out.println("Opcion no valida");
+            }
+        }
+    }
+
+    public void profileSelector(String profile) {
+        switch (profile) {
+            case "admin":
+                showMenuAdmin();
+                break;
+            case "customer":
+                showMenuCustomer();
+                break;
+            default:
+                System.out.println("No se pudo iniciar sesion. Verifique sus credenciales.");
                     System.out.println("❎ Opción no válida.");
                     break;
             }
@@ -125,6 +180,35 @@ public class MenuApp {
 
     public void showMenuAdmin() {
         while (true) {
+            System.out.println("\n=== MENÚ ADMINISTRADOR ===");
+            System.out.println("1. Gestionar Productos");
+            System.out.println("2. Gestionar Categorias");
+            System.out.println("3. Gestionar Clientes");
+            System.out.println("4. Salir");
+
+            int option = CustomerFormValidation.validateInt("Seleccione una opcion");
+
+            switch (option) {
+                case 1:
+                    System.out.println("Gestionar Productos");
+                    // productView.productMenu(); // descomenta cuando tengas el método
+                    break;
+                case 2:
+                    System.out.println("Gestionar Categorias");
+                    // categoryView.categoryMenu(); // descomenta cuando tengas el método
+                    break;
+                case 3:
+                    customerMenuAdmin();
+                    break;
+                case 4:
+                    System.out.println("Saliendo del menu administrador");
+                    return;
+                default:
+                    System.out.println("Opcion no valida");
+            }
+        }
+    }
+
             System.out.println("\n--- MENU ADMINISTRADOR ---");
             System.out.println("1. Gestionar Productos");
             System.out.println("2. Gestionar Categorías");
@@ -257,18 +341,22 @@ public class MenuApp {
     }
 
     public void showMenuCustomer() {
+        System.out.println("\n=== MENÚ CLIENTE ===");
         while (true) {
-            System.out.println("\n--- MENU CLIENTE ---");
-            System.out.println("1. VER CATÁLOGO DE PRODUCTOS (Todos)");
-            System.out.println("2. BUSCAR PRODUCTO POR ID");
-            System.out.println("3. Ver mi Perfil");
-            System.out.println("4. Modificar mi Perfil");
-            System.out.println("5. Cerrar Sesión");
+            System.out.println("1. Crear mi perfil");
+            System.out.println("2. Ver mi perfil por id");
+            System.out.println("3. Modificar mi perfil");
+            System.out.println("4. Salir");
 
-            int option = ProductFormValidation.validateInt("Seleccione una opción:");
+            int option = CustomerFormValidation.validateInt("Seleccione una opcion");
 
             switch (option) {
                 case 1:
+                    customerView.createCustomer();
+                    break;
+                case 2:
+                    int id = CustomerFormValidation.validateInt("Ingrese su id");
+                    customerView.getCustumerById(id);
                     System.out.println("\n--- Catálogo de Productos ---");
                     productView.getAllProducts();
                     break;
@@ -277,16 +365,13 @@ public class MenuApp {
                     productView.getProductById(id);
                     break;
                 case 3:
-                    int myId = ProductFormValidation.validateInt("Ingrese su ID para validar:");
-                    customerView.getCustumerById(myId);
-                    break;
-                case 4:
                     customerView.updateCustumer();
                     break;
-                case 5:
-                    System.out.println("Cerrando sesión de cliente...");
+                case 4:
+                    System.out.println("Saliendo del menu cliente");
                     return;
                 default:
+                    System.out.println("Opcion no valida");
                     System.out.println("❎ Opción no válida.");
                     break;
             }
@@ -294,7 +379,16 @@ public class MenuApp {
     }
 
     public void customerMenuAdmin() {
+        System.out.println("\n=== GESTIÓN DE CLIENTES ===");
         while (true) {
+            System.out.println("1. Crear perfil cliente");
+            System.out.println("2. Ver perfil por id");
+            System.out.println("3. Modificar perfil");
+            System.out.println("4. Ver todos los clientes");
+            System.out.println("5. Eliminar perfil");
+            System.out.println("6. Volver");
+
+            int option = CustomerFormValidation.validateInt("Seleccione una opcion");
             System.out.println("\n--- Módulo Clientes (Admin) ---");
             System.out.println("1. Crear\n2. Buscar por ID\n3. Modificar\n4. Ver Todos\n5. Eliminar\n6. Volver");
 
@@ -305,6 +399,8 @@ public class MenuApp {
                     customerView.createCustomer();
                     break;
                 case 2:
+                    int id = CustomerFormValidation.validateInt("Ingrese el id del cliente");
+                    customerView.getCustumerById(id);
                     customerView.getCustumerById(ProductFormValidation.validateInt("ID:"));
                     break;
                 case 3:
@@ -319,6 +415,7 @@ public class MenuApp {
                 case 6:
                     return;
                 default:
+                    System.out.println("Opcion no valida");
                     System.out.println("❎ Opción inválida.");
                     break;
             }
