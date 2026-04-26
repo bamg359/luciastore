@@ -1,10 +1,9 @@
 package storeapp.userinterface;
 
-import storeapp.domain.Customer;
-import storeapp.services.CustumerServiceImpl;
-import storeapp.utils.CustomerFormValidation;
 import storeapp.view.AdminView;
 import storeapp.view.CustomerView;
+import storeapp.view.PersonView;
+import storeapp.view.ProductView;
 
 import java.util.Scanner;
 
@@ -14,10 +13,12 @@ public class MenuApp {
     Scanner sc = new Scanner(System.in);
     private final CustomerView customerView;
     private final AdminView adminView;
+    private final PersonView personView;
 
-    public MenuApp(CustomerView customerView, AdminView adminView) {
+    public MenuApp(CustomerView customerView, AdminView adminView, PersonView personView) {
         this.customerView = customerView;
         this.adminView = adminView;
+        this.personView = personView;
     }
 
     public void showMainMenu(){
@@ -51,7 +52,16 @@ public class MenuApp {
                     break;
                 case 2:
                     System.out.println("Iniciar Sesion");
-                    profileSelector("admin");
+                    System.out.println("Seleccione tipo de usuario: 1. Administrador 2. Cliente");
+                    userType = sc.nextInt();
+                    sc.nextLine();
+                    if (userType == 1) {
+                        profileSelector("admin");
+                    } else if (userType == 2) {
+                        profileSelector("customer");
+                    } else {
+                        System.out.println("Opción no válida");
+                    }
                     break;
                 case 3:
                     System.out.println("Saliendo de la aplicacion");
@@ -95,6 +105,10 @@ public class MenuApp {
                     customerMenuAdmin();
                     break;
                 case 4:
+                    System.out.println("Gestionar Personas");
+                    personMenuAdmin();
+                    break;
+                case 5:
                     System.out.println("Saliendo del menu de administrador");
                     return;
                 default:
@@ -142,7 +156,7 @@ public class MenuApp {
         System.out.println("Menu Cliente");
         while (true) {
 
-            System.out.println("1. Crear Perfil Cliente 2. Ver perfil por id 3. Modifica perfil 4. Ver perfiles 5. eliminar Perfil");
+            System.out.println("1. Crear Perfil Cliente 2. Ver perfil por id 3. Modifica perfil 4. Ver perfiles 5. eliminar Perfil 6. Salir");
 
             int option = sc.nextInt();
             sc.nextLine();
@@ -170,9 +184,54 @@ public class MenuApp {
                     System.out.println("Eliminar perfil");
                     customerView.deleteCustomer();
                     break;
+                case 6:
+                    System.out.println("Saliendo del menu de clientes");
+                    return;
                 default:
                     System.out.println("Opcion no valida, por favor seleccione una opcion valida");
             }
         }
     }
+
+    public void personMenuAdmin(){
+
+        System.out.println("Menu Personas");
+        while (true) {
+
+            System.out.println("1. Crear Persona 2. Ver persona por id 3. Modifica persona 4. Ver personas 5. Eliminar Persona 6. Salir");
+
+            int option = sc.nextInt();
+            sc.nextLine();
+            switch (option) {
+                case 1:
+                    System.out.println("Crear persona");
+                    personView.createPerson();
+                    break;
+                case 2:
+                    System.out.println("Ver persona por id");
+                    System.out.println("Ingrese el id de la persona a buscar");
+                    int id = sc.nextInt();
+                    personView.getPersonById(id);
+                    break;
+                case 3:
+                    System.out.println("Modificar persona");
+                    personView.updatePerson();
+                    break;
+                case 4:
+                    System.out.println("Ver personas");
+                    personView.getAllPersons();
+                    break;
+                case 5:
+                    System.out.println("Eliminar persona");
+                    personView.deletePerson();
+                    break;
+                case 6:
+                    System.out.println("Saliendo del menu de personas");
+                    return;
+                default:
+                    System.out.println("Opcion no valida, por favor seleccione una opcion valida");
+            }
+        }
+    }
+
 }

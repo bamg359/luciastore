@@ -3,12 +3,16 @@ package storeapp.config;
 import storeapp.domain.Admin;
 import storeapp.domain.Customer;
 import storeapp.repository.CustomerRepository;
+import storeapp.repository.PersonRepository;
 import storeapp.services.AdminServiceImpl;
 import storeapp.services.CustumerService;
 import storeapp.services.CustumerServiceImpl;
+import storeapp.services.PersonServiceImpl;
 import storeapp.userinterface.MenuApp;
 import storeapp.view.AdminView;
 import storeapp.view.CustomerView;
+import storeapp.view.PersonView;
+import storeapp.view.ProductView;
 
 public class Config {
 
@@ -22,23 +26,19 @@ public class Config {
 
         Admin admin = new Admin();
         CustomerRepository customerRepository = new CustomerRepository();
+        PersonRepository personRepository = new PersonRepository();
+
         CustumerService customerService = new CustumerServiceImpl(customerRepository);
         CustomerView customerView = new CustomerView(customerService);
+
         AdminServiceImpl adminService = new AdminServiceImpl(admin, customerRepository);
         AdminView adminView = new AdminView(adminService, admin);
 
+        PersonServiceImpl personService = new PersonServiceImpl(personRepository);
+        PersonView personView = new PersonView(personService);
 
-        return new MenuApp(customerView, adminView);
+        return new MenuApp(customerView, adminView, personView);
 
     }
-
-
-
-
-
-
-
-
-
 
 }
