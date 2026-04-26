@@ -1,42 +1,45 @@
 package storeapp.view;
 
-import storeapp.domain.Category;
-import storeapp.domain.Product;
-import storeapp.services.StateSelector;
-
-import java.util.Scanner;
+import storeapp.services.ProductService;
+import storeapp.utils.CustomerFormValidation;
 
 public class ProductView {
 
-    Scanner scanner = new Scanner(System.in);
-    StateSelector stateSelector = new StateSelector();
-    Category category = new Category();
+    private final ProductService productService;
 
-
-    public Product createProduct(Product product){
-        System.out.println("Creating product...");
-        System.out.println("Ingrese el id del priducto");
-        int id = scanner.nextInt();
-        scanner.nextLine();
-        product.setIdProduct(id);
-        System.out.println("Ingrese el nombre del producto");
-        String name = scanner.nextLine();
-        product.setDescription(name);
-        System.out.println("Ingrese el precio del producto");
-        double price = scanner.nextDouble();
-        product.setPrice(price);
-        System.out.println("Ingrese la cantidad del producto");
-        int stock = scanner.nextInt();
-        product.setStock(stock);
-        System.out.println("INgrese el estado del producto");
-        boolean status = stateSelector.ProductState();
-        product.setState(status);
-        System.out.println("Ingrese el id de la categoria del producto");
-        product.setCategory(category);
-
-        return product;
+    public ProductView(ProductService productService){
+        this.productService = productService;
     }
 
+    public void createProduct(){
+        productService.createProduct();
+    }
 
+    public void getProductById(int id){
+        productService.getProductById(id);
+    }
 
+    public void updateProduct(){
+        System.out.println("Estoy en la Vista de Producto");
+        productService.updateProduct(CustomerFormValidation.validateInt("Ingrese el ID"));
+    }
+
+    public void deleteProduct(){
+        productService.deleteProduct(CustomerFormValidation.validateInt("Ingrese el id del Producto a eliminar"));
+    }
+
+    public void getAllProducts(){
+        productService.getAllProducts();
+    }
+
+    public void purchaseProduct() {
+        int productId = CustomerFormValidation.validateInt("Ingrese el ID del producto a comprar");
+        int quantity = CustomerFormValidation.validateInt("Ingrese la cantidad");
+        boolean success = productService.purchaseProduct(productId, quantity);
+        if (success) {
+            System.out.println("Compra realizada exitosamente");
+        } else {
+            System.out.println("No se pudo realizar la compra. Verifique stock o estado del producto");
+        }
+    }
 }

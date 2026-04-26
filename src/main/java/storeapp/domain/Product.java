@@ -82,4 +82,7 @@ public class Product {
                 ", category=" + category +
                 '}';
     }
+    public boolean getState() {
+        return state;
+    }
 }
