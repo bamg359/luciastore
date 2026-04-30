@@ -39,9 +39,7 @@ public class MenuApp {
             System.out.println("\n=== MENÚ PRINCIPAL ===");
             System.out.println("1. Registrar Usuario Cliente");
             System.out.println("2. Iniciar Sesión");
-            System.out.println("3. Crear Administrador (requiere admin)");
-            System.out.println("4. Salir");
-
+            System.out.println("3. Salir");
             int option = ProductFormValidation.validateInt("Seleccione una opción:");
 
             switch (option) {
@@ -52,9 +50,6 @@ public class MenuApp {
                     iniciarSesion();
                     break;
                 case 3:
-                    crearAdminDesdeMenuPrincipal();
-                    break;
-                case 4:
                     System.out.println("Saliendo de la aplicación...");
                     return;
                 default:
@@ -67,7 +62,6 @@ public class MenuApp {
     private void registrarUsuario() {
         System.out.println("\n--- Registro Cliente ---");
         customerView.createCustomer();
-        System.out.println("ℹ️ Las cuentas de administrador solo se crean desde permisos ADMIN_MANAGE.");
     }
 
     private void iniciarSesion() {
@@ -125,7 +119,8 @@ public class MenuApp {
             System.out.println("2. Gestionar Categorías");
             System.out.println("3. Gestionar Clientes");
             System.out.println("4. Gestionar Administradores");
-            System.out.println("5. Cerrar Sesión");
+            System.out.println("5. Crear Administrador");
+            System.out.println("0. Cerrar Sesión");
 
             int option = ProductFormValidation.validateInt("Seleccione:");
 
@@ -150,7 +145,13 @@ public class MenuApp {
                         adminMenuAdmin();
                     }
                     break;
+
                 case 5:
+                    if (requirePermission(AdminPermission.ADMIN_MANAGE)) {
+                        crearAdminDesdeMenuPrincipal();
+                    }
+                    break;
+                case 0:
                     authService.logout();
                     System.out.println("✅ Sesión cerrada correctamente.");
                     return;
@@ -264,7 +265,7 @@ public class MenuApp {
             Customer currentCustomer = currentCustomerOpt.get();
 
             System.out.println("\n--- MENU CLIENTE ---");
-            System.out.println("1. Ver catálogo de productos");
+            System.out.println("1. Ver todos los productos");
             System.out.println("2. Buscar producto por ID");
             System.out.println("3. Ver mi perfil");
             System.out.println("4. Modificar mi perfil");
@@ -276,10 +277,11 @@ public class MenuApp {
 
             switch (option) {
                 case 1:
+                    System.out.println("\n--- Lista de Productos ---");
                     productView.getAllProducts();
                     break;
                 case 2:
-                    productView.getProductById(ProductFormValidation.validateInt("Ingrese ID de producto:"));
+                    productView.getProductById();
                     break;
                 case 3:
                     customerView.getCustumerById(currentCustomer.getId());

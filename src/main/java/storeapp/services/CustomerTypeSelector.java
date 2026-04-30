@@ -28,6 +28,8 @@ public class CustomerTypeSelector {
                 break;
             default:
                 System.out.println("❎ Seleccione una Opción valida");
+                selectTypeCustomer();
+                break;
         }
 
         return value;

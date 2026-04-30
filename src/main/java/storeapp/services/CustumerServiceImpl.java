@@ -1,9 +1,11 @@
 package storeapp.services;
 
+import jdk.jshell.Snippet;
 import storeapp.domain.Customer;
 import storeapp.repository.CustomerRepository;
 import storeapp.utils.CustomerFormValidation;
 
+import java.awt.*;
 import java.util.Optional;
 
 public class CustumerServiceImpl implements CustumerService {
@@ -36,27 +38,24 @@ public class CustumerServiceImpl implements CustumerService {
         }
 
 
-        System.out.println("Ingrese el nombre del cliente");
         String name = CustomerFormValidation.validateString("Ingrese el nombre del cliente");
         customer.setName(name);
 
-        System.out.println("Ingrese el apellido");
+
         String lastName = CustomerFormValidation.validateString("Ingrese el apellido");
         customer.setLastName(lastName);
 
-        System.out.println("ingrese el email");
+
         String email = CustomerFormValidation.validateString("ingrese el email");
         customer.setEmail(email);
 
-        System.out.println("Ingrese el password ");
+
         String password = CustomerFormValidation.validateString("Ingrese el password ");
         customer.setPassword(password);
 
-        System.out.println("Estado Cliente ");
 
-        customer.setStatus(CustomerStateSelector.selectCustomerState());
+        customer.setStatus(CustomerStateSelector.selectCustomerState("Estado del cliente"));
 
-        System.out.println("Cupo");
         double quote = CustomerFormValidation.validateDouble("Cupo");
         customer.setQuote(quote);
 

@@ -22,7 +22,7 @@ CustomerFormValidation {
                 customer.setId(id);
 
             } catch (Exception e){
-                System.out.println("❎ Error al ingresar el id del cliente, por favor ingrese un numero entero");
+                System.out.println("❎ Error al ingresar el id del cliente, por favor ingrese numeros");
                 validInput = false;
                 sc.nextLine();
             }}

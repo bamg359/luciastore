@@ -10,4 +10,5 @@ public interface ProductService {
         public List<Product> getAllProducts();
         public Product updateProduct(int id);
         public void deleteProduct(int id);
+
 }

@@ -8,8 +8,8 @@ import java.util.List;
 public class ProductRepository {
     // CORRECCIÓN 1: Se agrega 'null' como último parámetro porque el constructor ahora pide Category
     private List<Product> products = new ArrayList<>(Arrays.asList(
-            new Product(1, "Producto 1", 10.0, 100, true, null),
-            new Product(2, "Producto 2", 20.0, 200, true, null)
+            new Product(1001, "Lava piso", 10.0, 100, true, null),
+            new Product(2001, "Lava ropa", 20.0, 200, true, null)
     ));
 
     public Product saveProduct(Product product) {
@@ -28,7 +28,7 @@ public class ProductRepository {
     public Product findProductById(int id) {
         for (Product product : products) {
             if (product.getIdProduct() == id) {
-                return product; // Retorna el producto encontrado
+                return product;
             }
         }
         return null; // Si termina el ciclo y no lo encuentra

@@ -54,7 +54,7 @@ public class AuthService {
 
             resetFailedAttempts(normalizedEmail);
             authContext.loginCustomer(customer.get());
-            return AuthResult.success(AuthRole.CUSTOMER, "Bienvenido " + customer.get().getName());
+            return AuthResult.success(AuthRole.CUSTOMER, "Bienvenido " + customer.get().getName() + " " + customer.get().getLastName());
         }
 
         int failedAttempts = registerFailedAttempt(normalizedEmail);

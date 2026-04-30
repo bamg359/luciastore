@@ -77,7 +77,13 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Product getProductById(int id) {
-        return productRepository.findProductById(id);
+        Product product = productRepository.findProductById(id);
+        if (product != null) {
+            System.out.println(product);
+        } else {
+            System.out.println("❎ Producto no encontrado con el ID: " + id);
+        }
+        return product;
     }
 
     @Override

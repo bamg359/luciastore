@@ -3,8 +3,6 @@ package storeapp.view;
 import storeapp.services.ProductService;
 import storeapp.utils.ProductFormValidation;
 
-import static java.lang.System.*;
-
 public class ProductView {
 
     private final ProductService productService;
@@ -16,15 +14,11 @@ public class ProductView {
         productService.createProduct();
     }
 
-    public void getProductById(int id){
-        productService.getProductById(id);
-    }
     public void getProductById() {
         productService.getProductById(ProductFormValidation.validateInt("Ingrese el ID del producto a buscar"));
     }
     public void getAllProducts() {
-        System.out.println("--- Lista de Productos ---");
-        productService.getAllProducts().forEach(System.out::println);
+        productService.getAllProducts();
     }
     public void updateProduct(){
         productService.updateProduct(ProductFormValidation.validateInt("Ingrese el ID del producto a actualizar"));
