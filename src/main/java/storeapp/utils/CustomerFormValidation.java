@@ -5,7 +5,8 @@ import storeapp.domain.Customer;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
-public class CustomerFormValidation {
+public class
+CustomerFormValidation {
 
     static Scanner sc = new Scanner(System.in);
 
@@ -21,7 +22,7 @@ public class CustomerFormValidation {
                 customer.setId(id);
 
             } catch (Exception e){
-                System.out.println("Error al ingresar el id del cliente, por favor ingrese un numero entero");
+                System.out.println("❎ Error al ingresar el id del cliente, por favor ingrese un numero entero");
                 validInput = false;
                 sc.nextLine();
             }}
@@ -39,7 +40,7 @@ public class CustomerFormValidation {
                 return value;
 
             }catch (InputMismatchException e){
-                System.out.println("Error al ingresar el valor, este debe ser un numero entero");
+                System.out.println("❎ Error al ingresar el valor, este debe ser un numero entero");
                 sc.nextLine();
             }
         }
@@ -56,7 +57,7 @@ public class CustomerFormValidation {
                 return value;
 
             }catch (InputMismatchException e){
-                System.out.println("Error al ingresar el valor, este debe ser un numero decimal");
+                System.out.println("❎ Error al ingresar el valor, este debe ser un numero decimal");
                 sc.nextLine();
             }
         }
@@ -73,7 +74,7 @@ public class CustomerFormValidation {
                 return value;
 
             }catch (InputMismatchException e){
-                System.out.println("Error al ingresar el valor, este debe ser un booleano (true/false)");
+                System.out.println("❎ Error al ingresar el valor, este debe ser un booleano (true/false)");
                 sc.nextLine();
             }
         }
@@ -90,7 +91,7 @@ public class CustomerFormValidation {
                 return value;
             }
             sc.nextLine();
-            throw new InputMismatchException("Error al ingresar el valor , el campo no debe estar vacio");
+            throw new InputMismatchException("❎ Error al ingresar el valor , el campo no debe estar vacio");
         }
 
     }
@@ -99,15 +100,15 @@ public class CustomerFormValidation {
 
     public static boolean validateCustomerForm(String name, String email, String phone) {
         if (name == null || name.trim().isEmpty()) {
-            return false; // Name is required
+            return false;
         }
         if (email == null || !email.matches("^[A-Za-z0-9+_.-]+@(.+)$")) {
-            return false; // Invalid email format
+            return false;
         }
         if (phone == null || !phone.matches("^\\d{10}$")) {
-            return false; // Phone number must be 10 digits
+            return false;
         }
-        return true; // All validations passed
+        return true;
     }
 
 
