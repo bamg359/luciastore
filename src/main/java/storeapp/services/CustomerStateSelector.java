@@ -5,12 +5,14 @@ import storeapp.utils.CustomerFormValidation;
 
 public class CustomerStateSelector {
 
-    public static boolean selectCustomerState(){
+    public static boolean selectCustomerState(String estadoDelCliente){
 
 
         boolean value= false;
 
-        System.out.println("Seleccione 1. Activo 2. Inactivo");
+        System.out.println("Seleccione \n" +
+                "1.✅Activo \n" +
+                "2.❎ Inactivo");
 
         int option = CustomerFormValidation.validateInt("Opcion");
 
@@ -22,11 +24,11 @@ public class CustomerStateSelector {
                 value = CustomerState.INACTIVE.getDescription();
                 break;
             default:
-                System.out.println("Seleccione una opcion valida");
+                System.out.println("❎ Seleccione una opcion valida");
+                selectCustomerState(estadoDelCliente);
+                break;
         }
-
         return value;
-
     }
 
 
