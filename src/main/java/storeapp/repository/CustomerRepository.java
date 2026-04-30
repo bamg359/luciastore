@@ -9,7 +9,7 @@ import java.util.Optional;
 
 public class CustomerRepository {
 
-    List<Customer> customers = new ArrayList<>(Arrays.asList(
+    private final List<Customer> customers = new ArrayList<>(Arrays.asList(
             new Customer(1, "John", "Doe",   "jd@mail.com", "1234567890", true, 1000000.00, "NUEVO"),
             new Customer(2, "Jane", "Smith", "js@mail.com", "1234567890", true, 2000000.00, "ANTIGUO")
     ));
@@ -20,36 +20,31 @@ public class CustomerRepository {
     }
 
     public List<Customer> findAllCustomers() {
-        for (Customer customer : customers) {
-            System.out.println(customer.getId() + " " + customer.getName() + " " +
-                    customer.getLastName() + " " + customer.getEmail() + " " +
-                    customer.isStatus() + " " + customer.getQuote() + " " +
-                    customer.getCustomerType());
-        }
         return customers;
     }
 
-
-    public Customer findCustomerById(int id){
-        for(Customer customer: customers){
-            if(customer.getId() == id){
-                return customer;
-            }
-        }
     public Customer findCustomerById(int id) {
         for (Customer customer : customers) {
             if (customer.getId() == id) {
                 return customer;
             }
         }
-        System.out.println("Cliente no encontrado");
         return null;
     }
 
-    // ✅ NUEVO: buscar cliente por email y password para autenticación
+    public Optional<Customer> findByEmail(String email) {
+        for (Customer customer : customers) {
+            if (customer.getEmail().equalsIgnoreCase(email)) {
+                return Optional.of(customer);
+            }
+        }
+        return Optional.empty();
+    }
+
     public Optional<Customer> findByEmailAndPassword(String email, String password) {
         for (Customer customer : customers) {
-            if (customer.getEmail().equals(email) && customer.getPassword().equals(password)) {
+            if (customer.getEmail().equalsIgnoreCase(email)
+                    && customer.getPassword().equals(password)) {
                 return Optional.of(customer);
             }
         }
@@ -68,13 +63,6 @@ public class CustomerRepository {
 
 
     public void deleteCustomer(int id){
-        for(int i = 0; i < customers.size(); i++){
-            if(customers.get(i).getId() == id){
-                customers.remove(i);
-                break;
-            }
-        }
-    public void deleteCustomer(int id) {
         customers.removeIf(customer -> customer.getId() == id);
     }
 }
