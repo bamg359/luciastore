@@ -3,49 +3,26 @@ package storeapp.config;
 import storeapp.repository.AdminRepository;
 import storeapp.repository.CategoryRepository;
 import storeapp.repository.CustomerRepository;
-import storeapp.repository.ProductRepository;
-import storeapp.repository.CategoryRepository;
 import storeapp.repository.OrderRepository;
-import storeapp.services.*;
+import storeapp.repository.ProductRepository;
 import storeapp.services.AdminServiceImpl;
 import storeapp.services.AuthContext;
+import storeapp.services.AuthService;
 import storeapp.services.CategoryServiceImpl;
 import storeapp.services.CustumerService;
 import storeapp.services.CustumerServiceImpl;
-import storeapp.services.ProductServiceImpl;
-import storeapp.services.CategoryServiceImpl;
 import storeapp.services.OrderService;
 import storeapp.services.OrderServiceImpl;
+import storeapp.services.ProductServiceImpl;
 import storeapp.userinterface.MenuApp;
 import storeapp.view.AdminView;
 import storeapp.view.CategoryView;
 import storeapp.view.CustomerView;
-import storeapp.view.ProductView;
-import storeapp.view.CategoryView;
 import storeapp.view.OrderView;
+import storeapp.view.ProductView;
 
 public class Config {
 
-    public static MenuApp createMenuApp(){
-
-        // 1. Configuración de Usuarios (Clientes y Admins)
-        Admin admin = new Admin();
-        CustomerRepository customerRepository = new CustomerRepository();
-        CustumerService customerService = new CustumerServiceImpl(customerRepository);
-        CustomerView customerView = new CustomerView(customerService);
-        AdminServiceImpl adminService = new AdminServiceImpl(admin, customerRepository);
-        AdminView adminView = new AdminView(adminService, admin);
-
-        // 2. ✅ AuthService — usa el mismo customerRepository
-        AuthService authService = new AuthService(customerRepository);
-
-        // 3. Configuración de Categorías
-        CategoryRepository categoryRepository = new CategoryRepository();
-        CategoryServiceImpl categoryService = new CategoryServiceImpl(categoryRepository);
-        CategoryView categoryView = new CategoryView(categoryService);
-
-        // 4. Configuración de Productos
-        ProductRepository productRepository = new ProductRepository();
     private Config() {
     }
 
@@ -55,34 +32,26 @@ public class Config {
         AdminRepository adminRepository = new AdminRepository();
         CategoryRepository categoryRepository = new CategoryRepository();
         ProductRepository productRepository = new ProductRepository();
+        OrderRepository orderRepository = new OrderRepository();
+
+        // Contexto de sesión compartido entre servicios
+        AuthContext authContext = new AuthContext();
 
         // Servicios
         CustumerService customerService = new CustumerServiceImpl(customerRepository);
-        AuthContext authContext = new AuthContext();
         AdminServiceImpl adminService = new AdminServiceImpl(customerRepository, adminRepository, authContext);
+        AuthService authService = new AuthService(adminRepository, customerRepository, authContext);
         CategoryServiceImpl categoryService = new CategoryServiceImpl(categoryRepository);
         ProductServiceImpl productService = new ProductServiceImpl(productRepository, categoryRepository);
+        OrderService orderService = new OrderServiceImpl(orderRepository, productRepository);
 
         // Vistas
         CustomerView customerView = new CustomerView(customerService);
         AdminView adminView = new AdminView(adminService);
         CategoryView categoryView = new CategoryView(categoryService);
         ProductView productView = new ProductView(productService);
-
-        // 4. NUEVA SECCIÓN: Configuración de Órdenes
-        OrderRepository orderRepository = new OrderRepository();
-        OrderService orderService = new OrderServiceImpl(orderRepository, productRepository);
         OrderView orderView = new OrderView(orderService);
 
-        // 5. RETORNO: Pasamos las 5 vistas al menú
-        return new MenuApp(customerView, adminView, productView, categoryView, orderView);
-        // 5. Retorno con las 4 vistas + authService
-        return new MenuApp(customerView, adminView, productView, categoryView, authService);
+        return new MenuApp(customerView, adminView, productView, categoryView, orderView, authService);
     }
 }
-        // MenuApp con todas las dependencias necesarias
-        return new MenuApp(customerView, adminView, productView, categoryView, adminService, adminRepository);
-    }
-}
-
-

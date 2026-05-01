@@ -2,6 +2,7 @@ package storeapp.utils;
 
 import storeapp.domain.enums.AdminPermission;
 import storeapp.domain.enums.AdminRole;
+import storeapp.domain.enums.AdminState;
 
 import java.util.EnumSet;
 import java.util.Set;
@@ -19,17 +20,15 @@ public class AdminFormValidation {
 
         int option = ProductFormValidation.validateInt("Ingrese la opción:");
 
-        switch (option) {
-            case 1:
-                return AdminRole.SUPERADMIN;
-            case 2:
-                return AdminRole.MODERADOR;
-            case 3:
-                return AdminRole.OPERADOR;
-            default:
+        return switch (option) {
+            case 1 -> AdminRole.SUPERADMIN;
+            case 2 -> AdminRole.MODERADOR;
+            case 3 -> AdminRole.OPERADOR;
+            default -> {
                 System.out.println("❎ Opción no válida. Se asignará OPERADOR.");
-                return AdminRole.OPERADOR;
-        }
+                yield AdminRole.OPERADOR;
+            }
+        };
     }
 
     public static Set<AdminPermission> selectAdminPermissions(AdminRole role) {
@@ -44,35 +43,26 @@ public class AdminFormValidation {
                 System.out.println("3. Solo lectura de catálogo");
 
                 int modOption = ProductFormValidation.validateInt("Seleccione:");
-                switch (modOption) {
-                    case 1:
-                        return EnumSet.of(
-                                AdminPermission.PRODUCT_MANAGE,
-                                AdminPermission.CATEGORY_MANAGE,
-                                AdminPermission.PRODUCT_READ,
-                                AdminPermission.CATEGORY_READ
-                        );
-                    case 2:
-                        return EnumSet.of(
-                                AdminPermission.PRODUCT_MANAGE,
-                                AdminPermission.CATEGORY_MANAGE,
-                                AdminPermission.CUSTOMER_MANAGE,
-                                AdminPermission.PRODUCT_READ,
-                                AdminPermission.CATEGORY_READ
-                        );
-                    default:
-                        return EnumSet.of(
-                                AdminPermission.PRODUCT_READ,
-                                AdminPermission.CATEGORY_READ
-                        );
-                }
+                return switch (modOption) {
+                    case 1 -> EnumSet.of(
+                            AdminPermission.PRODUCT_MANAGE,
+                            AdminPermission.CATEGORY_MANAGE,
+                            AdminPermission.PRODUCT_READ,
+                            AdminPermission.CATEGORY_READ
+                    );
+                    case 2 -> EnumSet.of(
+                            AdminPermission.PRODUCT_MANAGE,
+                            AdminPermission.CATEGORY_MANAGE,
+                            AdminPermission.CUSTOMER_MANAGE,
+                            AdminPermission.PRODUCT_READ,
+                            AdminPermission.CATEGORY_READ
+                    );
+                    default -> defaultReadPermissions();
+                };
 
             case OPERADOR:
             default:
-                return EnumSet.of(
-                        AdminPermission.PRODUCT_READ,
-                        AdminPermission.CATEGORY_READ
-                );
+                return defaultReadPermissions();
         }
     }
 
@@ -97,15 +87,21 @@ public class AdminFormValidation {
 
         int option = ProductFormValidation.validateInt("Ingrese la opción:");
 
-        switch (option) {
-            case 1:
-                return AdminState.ACTIVO;
-            case 2:
-                return AdminState.INACTIVO;
-            default:
+        return switch (option) {
+            case 1 -> AdminState.ACTIVO;
+            case 2 -> AdminState.INACTIVO;
+            default -> {
                 System.out.println("❎ Opción no válida. Se asignará ACTIVO.");
-                return AdminState.ACTIVO;
-        }
+                yield AdminState.ACTIVO;
+            }
+        };
+    }
+
+    private static EnumSet<AdminPermission> defaultReadPermissions() {
+        return EnumSet.of(
+                AdminPermission.PRODUCT_READ,
+                AdminPermission.CATEGORY_READ
+        );
     }
 }
 

@@ -5,7 +5,7 @@ import storeapp.utils.CustomerFormValidation;
 
 public class CustomerStateSelector {
 
-    public static boolean selectCustomerState(){
+    public static boolean selectCustomerState(String estadoDelCliente){
 
 
         boolean value= false;
@@ -25,10 +25,10 @@ public class CustomerStateSelector {
                 break;
             default:
                 System.out.println("❎ Seleccione una opcion valida");
+                selectCustomerState(estadoDelCliente);
+                break;
         }
-
         return value;
-
     }
 
 

@@ -15,8 +15,6 @@ public class CustomerView {
     public void createCustomer(){
         customerService.createCustomer();
     }
-
-
     public void getCustumerById(int id){
 
         Customer customer = customerService.getCustomerById(id);
