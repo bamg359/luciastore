@@ -9,10 +9,11 @@ import storeapp.services.outputport.CustomerPersistencePort;
 import storeapp.userinterface.MenuApp;
 import storeapp.view.AdminView;
 import storeapp.view.CustomerView;
+import storeapp.view.ProductView;
 
 public class Config {
 
-    public static MenuApp createMenuApp(){
+    public static MenuApp createMenuApp() {
 
         // esto es un patron Simple Factory, se encarga de crear los objetos necesarios para la aplicacion, y devolver un objeto MenuApp con todos los objetos necesarios para la aplicacion,
         // esto es para evitar tener que crear los objetos en el main, y tener
@@ -31,7 +32,6 @@ public class Config {
         return new MenuApp(customerView, adminView);
 
     }
-
 
 
 
