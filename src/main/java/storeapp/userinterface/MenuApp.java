@@ -1,6 +1,7 @@
 package storeapp.userinterface;
 
 import storeapp.domain.Customer;
+import storeapp.persistence.database.DataBaseConnectionMySql;
 import storeapp.services.CustumerServiceImpl;
 import storeapp.utils.CustomerFormValidation;
 import storeapp.view.AdminView;
@@ -29,6 +30,8 @@ public class MenuApp {
         sc.nextLine();
 
         while(init != 0){
+
+            DataBaseConnectionMySql.getInstance().getConnection();
 
             System.out.println("Selecione 1. Registrar Usuario 2. Iniciar Sesion 3. Salir");
             int option = sc.nextInt();
