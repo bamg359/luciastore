@@ -1,6 +1,7 @@
 package storeapp;
 
 import storeapp.config.Config;
+import storeapp.persistence.database.DataBaseConnectionMySql;
 import storeapp.userinterface.MenuApp;
 
 public class Main {
@@ -11,6 +12,10 @@ public class Main {
         MenuApp menuApp = Config.createMenuApp();
 
             menuApp.showMainMenu();
+
+
+
+
     }
 }
 

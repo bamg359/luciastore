@@ -1,7 +1,9 @@
 package storeapp.config;
 
 import storeapp.domain.Admin;
-import storeapp.persistence.repository.CustomerRepository;
+import storeapp.persistence.database.DataBaseConnectionMySql;
+import storeapp.persistence.repository.CustomerRepositoryAdapterMySql;
+import storeapp.persistence.repository.CustomerRepositoryArray;
 import storeapp.services.AdminServiceImpl;
 import storeapp.services.input.CustumerService;
 import storeapp.services.CustumerServiceImpl;
@@ -10,6 +12,8 @@ import storeapp.userinterface.MenuApp;
 import storeapp.view.AdminView;
 import storeapp.view.CustomerView;
 import storeapp.view.ProductView;
+
+import java.sql.Connection;
 
 public class Config {
 
@@ -22,10 +26,12 @@ public class Config {
         //  y no tenemos que cambiar el codigo del main, esto es una buena practica de programacion, ya que nos permite tener un codigo mas limpio y mantenible.
 
         Admin admin = new Admin();
-        CustomerPersistencePort customerRepository = new CustomerRepository();
-        CustumerService customerService = new CustumerServiceImpl(customerRepository);
+        CustomerPersistencePort customerRepositoryArray = new CustomerRepositoryArray();
+        Connection connection = DataBaseConnectionMySql.getInstance().getConnection();
+        CustomerPersistencePort custumerRepositoryDB = new CustomerRepositoryAdapterMySql(connection);
+        CustumerService customerService = new CustumerServiceImpl(custumerRepositoryDB);
         CustomerView customerView = new CustomerView(customerService);
-        AdminServiceImpl adminService = new AdminServiceImpl(admin, customerRepository);
+        AdminServiceImpl adminService = new AdminServiceImpl(admin, custumerRepositoryDB);
         AdminView adminView = new AdminView(adminService, admin);
 
 

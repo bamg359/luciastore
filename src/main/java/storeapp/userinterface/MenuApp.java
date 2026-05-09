@@ -1,11 +1,11 @@
 package storeapp.userinterface;
 
 import storeapp.domain.Customer;
+import storeapp.persistence.database.DataBaseConnectionMySql;
 import storeapp.services.CustumerServiceImpl;
 import storeapp.utils.CustomerFormValidation;
 import storeapp.view.AdminView;
 import storeapp.view.CustomerView;
-import storeapp.view.ProductView;
 
 import java.util.Scanner;
 
@@ -31,8 +31,9 @@ public class MenuApp {
 
         while(init != 0){
 
-        while (init != 0) {
-            System.out.println("Selecione" + "\n" + " 1. Registrar Usuario 2. Iniciar Sesion 3. Salir");
+            DataBaseConnectionMySql.getInstance().getConnection();
+
+            System.out.println("Selecione 1. Registrar Usuario 2. Iniciar Sesion 3. Salir");
             int option = sc.nextInt();
             sc.nextLine();
 
@@ -97,7 +98,6 @@ public class MenuApp {
             switch (option){
                 case 1:
                     System.out.println("Gestionar Productos");
-                    productMenuAdmin();
                     break;
                 case 2:
                     System.out.println("Gestionar Categorias");
@@ -114,45 +114,6 @@ public class MenuApp {
             }
         }
 
-    }
-
-    public void productMenuAdmin() {
-
-        while (true){
-            System.out.println("\n--- Menu Productos ---");
-            System.out.println("1. Crear producto");
-            System.out.println("2. Ver todos los productos");
-            System.out.println("3. Buscar producto por id");
-            System.out.println("4. Modificar producto");
-            System.out.println("5. Eliminar producto");
-            System.out.println("6. Salir");
-
-            int option = sc.nextInt();
-            sc.nextLine();
-
-            switch (option){
-                case 1:
-                    productView.createProduct();
-                    break;
-                case 2:
-                    productView.getAllProducts();
-                    break;
-                case 3:
-                    productView.getProductById();
-                    break;
-                case 4:
-                    productView.updateProduct();
-                    break;
-                case 5:
-                    productView.deleteProduct();
-                    break;
-                case 6:
-                    System.out.println("Saliendo del menu de productos...");
-                    return;
-                default:
-                    System.out.println("Opcion no valida");
-            }
-        }
     }
 
 
@@ -182,7 +143,6 @@ public class MenuApp {
                     break;
                 case 4:
                     System.out.println("Saliendo del Menu Cliente...");
-                    return;
                 default:
                     System.out.println("Opcion no valida, por favor seleccione una opcion valida");
             }
@@ -226,7 +186,6 @@ public class MenuApp {
                     break;
                 case 6:
                     System.out.println("Saliendo del menu de Clientes...");
-                    return;
                 default:
                     System.out.println("Opcion no valida, por favor seleccione una opcion valida");
             }

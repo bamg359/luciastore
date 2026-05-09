@@ -6,9 +6,8 @@ import storeapp.services.outputport.CustomerPersistencePort;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
-public class CustomerRepository implements CustomerPersistencePort {
+public class CustomerRepositoryArray implements CustomerPersistencePort {
 
     List<Customer> customers = new ArrayList<>(Arrays.asList(
             new Customer(  1, "John", "Doe", "jd@mail.com" , "1234567890", true , 1000000.00 , "NUEVO" ),
@@ -56,10 +55,10 @@ public class CustomerRepository implements CustomerPersistencePort {
 
     }
 
-    public Customer updateCustomer(int id){
+    public Customer updateCustomer(Customer customer){
 
-        for(Customer customer: customers){
-            if(id == customer.getId()){
+        for(Customer customer1: customers){
+            if(customer1.getId() == customer.getId()){
                 return customer;
             }
 
