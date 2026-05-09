@@ -103,7 +103,7 @@ public class CustumerServiceImpl implements CustumerService {
                     break;
             }
 
-            customerRepository.updateCustomer(id);
+            customerRepository.updateCustomer(customer);
         }else{
             System.out.println("Cliente  no encontrado");
         }
