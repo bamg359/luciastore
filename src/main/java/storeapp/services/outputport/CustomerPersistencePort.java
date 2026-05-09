@@ -10,7 +10,7 @@ public interface CustomerPersistencePort {
     Customer saveCustomer(Customer customer);
     List<Customer> findAllCustomers();
     Customer findCustomerById(int id);
-    Customer updateCustomer(int id);
+    Customer updateCustomer(Customer customer);
     void deleteCustomer(int id);
 
 
