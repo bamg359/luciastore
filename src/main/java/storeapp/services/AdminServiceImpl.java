@@ -3,13 +3,13 @@ package storeapp.services;
 import storeapp.domain.Admin;
 import storeapp.domain.Customer;
 import storeapp.services.input.AdminService;
-import storeapp.services.input.CustumerAdminService;
+import storeapp.services.input.CustomerAdminService;
 import storeapp.services.outputport.CustomerPersistencePort;
 
 import java.util.List;
 import java.util.Optional;
 
-public class AdminServiceImpl  implements AdminService, CustumerAdminService {
+public class AdminServiceImpl  implements AdminService, CustomerAdminService {
 
     private final CustomerPersistencePort customerRepository;
 

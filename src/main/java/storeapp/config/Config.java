@@ -2,9 +2,13 @@ package storeapp.config;
 
 import storeapp.domain.Admin;
 import storeapp.persistence.database.DataBaseConnectionMySql;
+import storeapp.persistence.mapper.CustomerRowMapper;
+import storeapp.persistence.mapper.RowMapper;
 import storeapp.persistence.repository.CustomerRepositoryAdapterMySql;
 import storeapp.persistence.repository.CustomerRepositoryArray;
 import storeapp.services.AdminServiceImpl;
+import storeapp.services.CustomerAdminServiceImpl;
+import storeapp.services.input.CustomerAdminService;
 import storeapp.services.input.CustumerService;
 import storeapp.services.CustumerServiceImpl;
 import storeapp.services.outputport.CustomerPersistencePort;
@@ -27,11 +31,13 @@ public class Config {
         Admin admin = new Admin();
         CustomerPersistencePort customerRepositoryArray = new CustomerRepositoryArray();
         Connection connection = DataBaseConnectionMySql.getInstance().getConnection();
-        CustomerPersistencePort custumerRepositoryDB = new CustomerRepositoryAdapterMySql(connection);
+        CustomerRowMapper rowMapper = new CustomerRowMapper();
+        CustomerPersistencePort custumerRepositoryDB = new CustomerRepositoryAdapterMySql(connection, rowMapper);
         CustumerService customerService = new CustumerServiceImpl(custumerRepositoryDB);
+        CustomerAdminService customerAdminService = new CustomerAdminServiceImpl(custumerRepositoryDB);
         CustomerView customerView = new CustomerView(customerService);
         AdminServiceImpl adminService = new AdminServiceImpl(admin, custumerRepositoryDB);
-        AdminView adminView = new AdminView(adminService, admin);
+        AdminView adminView = new AdminView(adminService, customerAdminService);
 
 
         return new MenuApp(customerView, adminView);

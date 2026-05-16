@@ -1,7 +1,7 @@
 package storeapp.services;
 
 import storeapp.domain.enums.CustomerTypeEnum;
-import storeapp.utils.CustomerFormValidation;
+import storeapp.utils.FormValidation;
 
 public class CustomerTypeSelector {
 
@@ -11,7 +11,7 @@ public class CustomerTypeSelector {
 
         System.out.println("Seleccione 1. Nuevo 2. Antiguo 3. En mora");
 
-        int option = CustomerFormValidation.validateInt("Opcion");
+        int option = FormValidation.validateInt("Opcion");
 
         switch (option){
             case 1:

@@ -1,7 +1,7 @@
 package storeapp.services;
 
 import storeapp.domain.enums.CustomerState;
-import storeapp.utils.CustomerFormValidation;
+import storeapp.utils.FormValidation;
 
 public class CustomerStateSelector {
 
@@ -12,7 +12,7 @@ public class CustomerStateSelector {
 
         System.out.println("Seleccione 1. Activo 2. Inactivo");
 
-        int option = CustomerFormValidation.validateInt("Opcion");
+        int option = FormValidation.validateInt("Opcion");
 
         switch (option){
             case 1:
